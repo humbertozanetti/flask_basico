@@ -1,4 +1,4 @@
-### Aula 01 - "Hello World" em Flask
+# Aula 01 - "Hello World" em Flask
 
 Para trabalhar com o Flask, devemos utilizar uma importação e apontar um objeto do tipo Flask:
 
@@ -57,4 +57,46 @@ if __name__ == '__main__':
 Notem que nossa rota mudou, agora temos um caminho composto por **/hello/**. O valor passado após a rota será o **valor** passado.
 Ao acessar a rota **http://127.0.0.1:5000/hello/Luke**, veremos que **Luke** para atribuído à variável **name**, que é o parâmetro de entrada da função.
 
+## Definição de tipos e problemas na URL
 
+Para bloquear tipos indesejados de valores, pode definir os **tipos dos valores** a serem passados:
+```
+from flask import Flask
+app = Flask(__name__)
+
+@app.route('/blog/<int:postID>')
+def show_blog(postID):
+    return 'Blog número %d' % postID
+
+@app.route('/rev/<float:revNo>')
+def revision(revNo):
+    return 'Revisão número %f' % revNo
+    
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+Se tentar passar um valor não correspondente em qualquer uma das rotas, a página não será encontrada.
+
+Como boa prática muitas vezes colocamos as rotas para serem acessadas por uma **/** ou duas. Por exemplo:
+```
+from flask import Flask
+app = Flask(__name__)
+
+
+# NOTE: somente a URL '/flask' funciona
+@app.route('/flask')
+def hello_flask():
+    return 'Hello Flask'
+
+# NOTE: ambas URLs '/python' e '/python/' funcionam
+@app.route('/python/')
+def hello_python():
+    return 'Hello Python'
+   
+if __name__ == '__main__':
+    app.run(debug=True)
+```
+
+### Exercício
+
+Faça um programa que tenha duas rotas. Uma rota leva para o **ADMIN** e outro para um **GUEST**. A rota **raiz** irá receber o valor **nome**. Se form digitado **ADMIN**, a rota será direcionada para uma função que irá imprimir **"Olá ADMIN**. Agora, se for digitado algum nome, será encaminhado para outra função que irá imprimir **Olá Fulano, você é GUEST**.
